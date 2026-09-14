@@ -1,5 +1,18 @@
 commitmessages.txt
 target
 .vscode
-.testando.ignore
 .DS_Store
+
+# Artefatos potencialmente produzidos pelo uso da IDE Eclipse 
+.classpath
+.project
+.settings/
+bin/
+*.launch
+.sts4-cache/
+*.pydevproject
+.metadata/
+tmp/
+*.tmp
+*.bak
+*.log
