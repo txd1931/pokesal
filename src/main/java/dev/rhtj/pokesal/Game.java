@@ -16,6 +16,7 @@ public class Game {
     private InputStream in = null;
     private Menu currentMenu = null;
 
+    private World world;
 
 
     public Game(PrintStream out, InputStream in, Menu initialMenu) {
@@ -26,6 +27,7 @@ public class Game {
 
     public void start() {
         playerInputLog = new ArrayList<>();
+        world = new World(10);
         gameLoop();
     }
 
@@ -48,5 +50,9 @@ public class Game {
     private void clearOutput() { 
         out.print(ANSI_CLEAR_AND_RESET);
         out.flush();
+    }
+
+    public World getWorld() {
+        return world;
     }
 }

@@ -67,7 +67,7 @@ public class MainMenu implements Menu{
         return switch (input) {
             case 1 -> new GameMenu();
             case 2 -> new AboutMenu(this);
-            case 3 -> new InventoryMenu(this);
+            case 3 -> new BackpackMenu(this);
             case 4 -> new ExitMenu(this);
             default -> this;
         };

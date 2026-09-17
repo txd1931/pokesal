@@ -1,0 +1,26 @@
+[
+    {
+        "id": "fireball",
+        "name": "Bola de Fogo",
+        "description": "Aplica efeito de fogo no inimigo",
+        "price": 200
+    },
+    {
+        "id": "potion_poison_weak",
+        "name": "Poção de Veneno",
+        "description": "Envenena o inimigo",
+        "price": 40
+    },
+    {
+        "id": "potion_poison_strong",
+        "name": "Poção de Veneno Forte",
+        "description": "Envenena bastante o inimigo",
+        "price": 120
+    },
+    {
+        "id": "antidote",
+        "name": "Antídoto",
+        "description": "Deixa o seu pokesal mais resistente a veneno",
+        "price": 80
+    }
+]

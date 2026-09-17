@@ -4,12 +4,17 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import dev.rhtj.pokesal.AnsiCode;
+import dev.rhtj.pokesal.entities.Backpack;
 
-public class InventoryMenu implements Menu {
+public class BackpackMenu implements Menu {
 
     private Menu caller = null;
+    private Backpack backpack = null;
+    private boolean canSell = false;
 
-    public InventoryMenu(Menu caller) {
+    public BackpackMenu(Backpack backpack, boolean canSell, Menu caller) {
+        this.canSell = canSell;
+        this.backpack = backpack;
         this.caller = caller;
     }
 
@@ -17,11 +22,14 @@ public class InventoryMenu implements Menu {
     public void display(PrintStream out) {
         out.println(
             AnsiCode.apply(
-                "INVENTARIO", 
+                "MOCHILA", 
                 AnsiCode.BOLD,
                 AnsiCode.CYAN
             )
         );
+
+        
+
     }
 
     @Override
