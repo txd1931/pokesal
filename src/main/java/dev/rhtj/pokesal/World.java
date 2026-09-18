@@ -1,8 +1,10 @@
 package dev.rhtj.pokesal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import dev.rhtj.pokesal.entities.Battle;
 import dev.rhtj.pokesal.entities.Trainer;
@@ -65,16 +67,35 @@ public class World {
     public World(int size) {
         battles = new ArrayList<>();
         trainers = new ArrayList<>();
-        map = generateMap(size, new Random().nextLong());
-
+        long seed = new Random().nextLong();
+        spawnTrainers(size, seed);
+        map = generateMap(size, seed);
     }
 
-    public TerrainType[][] generateMap(int size, long seed) {
+    private void spawnTrainers(int size, long seed) {
+        int trainerCount = (int) ((size * size) * (TRAINER_PERCENTAGE * 0.01f));
+        Set<String> positions = new HashSet<>();
+        Random random = new Random(seed);
+        for (int i = 0; i < trainerCount; i++) {
+            int x, y;
+            String key;
+            do {
+                x = random.nextInt(size);
+                y = random.nextInt(size);
+                key = x + ", " + y;
+            } while (positions.contains(key));
+            Trainer newTreiner = new Trainer(i == 0);
+            newTreiner.move(x, y);
+            trainers.add(newTreiner);
+        }
+    }
+
+    private TerrainType[][] generateMap(int size, long seed) {
         Random random = new Random(seed);
         TerrainType[][] terrain = new TerrainType[size][size];
         int storesSet = 0;
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map.length; y++) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
                 Integer roll = random.nextInt(3);
                 terrain[y][x] = switch(roll) {
                     case 0 -> TerrainType.HOT_ASPHALT;

@@ -8,7 +8,6 @@ import dev.rhtj.pokesal.AnsiCode;
 public class ExitMenu implements Menu {
 
     private boolean guaranteedSavedGame = false;
-    private int input = 0;
     private Menu nextMenu = null;
     private Menu caller = null;
 
@@ -57,6 +56,7 @@ public class ExitMenu implements Menu {
 
     @Override
     public String getInput(Scanner scanner) {
+        int input = 0;
         try {
             input = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {}

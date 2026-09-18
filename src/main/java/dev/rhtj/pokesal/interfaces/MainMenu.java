@@ -4,11 +4,62 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import dev.rhtj.pokesal.AnsiCode;
+import dev.rhtj.pokesal.Game;
+import dev.rhtj.pokesal.World;
+import dev.rhtj.pokesal.entities.Trainer;
 
 public class MainMenu implements Menu{
     
     private boolean greetPlayer = true;
     private int input = 0;
+    private Trainer player = null;
+    private Options options = null;
+    private Menu nextMenu = this;
+    private Menu gameMenu = null;
+
+    public MainMenu() {
+        player = Game.getInstance().getWorld().getPlayer();
+        options = new Options();
+        setupOptions();
+    }
+
+    private void setupOptions() {
+        options.clear();
+        options.add("Continuar Jogo");
+        options.add("Sobre");
+        options.add("Customizar seu Treinador");
+        options.add("Sair");
+        options.add("Mochila");
+        options.setActionToAll(this::selectOption);
+    }
+
+    private void selectOption(String text) {
+        switch (text) {
+            case "Continuar Jogo" -> {
+                if (gameMenu == null) {
+                    nextMenu = gameMenu = new GameMenu(this);
+                    
+                } else {
+                    nextMenu = gameMenu;
+                }
+            } 
+            case "Sobre" -> {
+                nextMenu = new AboutMenu(this);
+            }
+            case "Customizar seu Treinador" -> {
+                nextMenu = new TrainerMenu(player, this);
+            }
+            case "Sair" -> {
+                nextMenu = new ExitMenu(this);
+            }
+            case "Mochila" -> {
+                nextMenu = new BackpackMenu(player.getBackpack(), false, this);
+            }
+            default -> {
+                nextMenu = this;
+            }
+        }
+    }
 
     private void showGreetMessage(PrintStream out) {
         out.println(
@@ -23,7 +74,13 @@ public class MainMenu implements Menu{
         );
     }
 
-    private void showOptions(PrintStream out) {
+    @Override
+    public void display(PrintStream out) {
+        nextMenu = this;
+        if (greetPlayer) {
+            showGreetMessage(out);
+            return;
+        }
         out.println(
             AnsiCode.apply(
                 "PokeSal - Menu", 
@@ -31,21 +88,8 @@ public class MainMenu implements Menu{
                 AnsiCode.CYAN
             )
         );
-        out.println("1 - Continuar Jogo");
-        out.println("2 - Sobre");
-        out.println("3 - Inventario");
-        out.println("4 - Sair");
-    }
-    
-    @Override
-    public void display(PrintStream out) {
-        if (greetPlayer) {
-            showGreetMessage(out);
-            return;
-        }
-        
-        showOptions(out);
-
+        setupOptions();
+        options.displayAll(out);
     }
 
     @Override
@@ -59,17 +103,13 @@ public class MainMenu implements Menu{
         }
         greetPlayer = false;
 
+        options.choose(input);
+
         return String.valueOf(input);
     }
 
     @Override
     public Menu next() {
-        return switch (input) {
-            case 1 -> new GameMenu();
-            case 2 -> new AboutMenu(this);
-            case 3 -> new BackpackMenu(this);
-            case 4 -> new ExitMenu(this);
-            default -> this;
-        };
+        return nextMenu;
     }
 }

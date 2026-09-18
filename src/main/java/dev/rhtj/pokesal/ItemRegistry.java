@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 public class ItemRegistry {
@@ -63,6 +65,13 @@ public class ItemRegistry {
 
     public static int getSellingPrice(String id) {
         return (int) (getPrice(id) * 0.70f);
+    }
+
+    public static String getRandomId() {
+        Random random = new Random();
+        List<Item> itemList = new ArrayList<>(REGISTRY.values());
+        int randomIndex = random.nextInt(itemList.size());
+        return itemList.get(randomIndex).id;
     }
 
     public static boolean contains(String id) {

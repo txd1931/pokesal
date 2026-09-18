@@ -5,11 +5,14 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import dev.rhtj.pokesal.interfaces.MainMenu;
 import dev.rhtj.pokesal.interfaces.Menu;
 
 public class Game {
 
     private static final String ANSI_CLEAR_AND_RESET = "\033[H\033[2J";
+    
+    private static Game instance;
 
     private ArrayList<String> playerInputLog = null; 
     private PrintStream out = null;
@@ -19,15 +22,24 @@ public class Game {
     private World world;
 
 
-    public Game(PrintStream out, InputStream in, Menu initialMenu) {
+    private Game() { }
+
+    public static synchronized Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    public void setup(PrintStream out, InputStream in) {
         this.out = out;
         this.in = in;
-        this.currentMenu = initialMenu;
+        world = new World(10);
+        this.currentMenu = new MainMenu();
     }
 
     public void start() {
         playerInputLog = new ArrayList<>();
-        world = new World(10);
         gameLoop();
     }
 
