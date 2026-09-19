@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import dev.rhtj.pokesal.AnsiCode;
 import dev.rhtj.pokesal.Game;
-import dev.rhtj.pokesal.World;
 import dev.rhtj.pokesal.entities.Trainer;
 
 public class MainMenu implements Menu{
@@ -30,6 +29,8 @@ public class MainMenu implements Menu{
         options.add("Customizar seu Treinador");
         options.add("Sair");
         options.add("Mochila");
+        options.add("Pokedeck");
+        options.add("Loja de Pokesals");
         options.setActionToAll(this::selectOption);
     }
 
@@ -54,6 +55,12 @@ public class MainMenu implements Menu{
             }
             case "Mochila" -> {
                 nextMenu = new BackpackMenu(player.getBackpack(), false, this);
+            } 
+            case "Pokedeck" -> {
+                nextMenu = new PokedeckMenu(player, this);
+            }
+            case "Loja de Pokesals" -> {
+                nextMenu = new PokesalStoreMenu(this);
             }
             default -> {
                 nextMenu = this;
@@ -97,7 +104,9 @@ public class MainMenu implements Menu{
         if (!greetPlayer) {
             try {
                 input = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+                input = 0;
+            }
         } else {
             scanner.nextLine();
         }

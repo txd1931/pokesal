@@ -1,0 +1,62 @@
+[
+    {
+        "name": "BulbaSal",
+        "description": "Um pokesal que se parece com uma planta",
+        "type": "PLANT",
+        "healthPoints": 100,
+        "attack": 20,
+        "defense": 35,
+        "speed": 10,
+        "price": 600
+    },
+    {
+        "name": "CharSal",
+        "description": "Um pokesal que se parece com fogo",
+        "type": "FIRE",
+        "healthPoints": 150,
+        "attack": 25,
+        "defense": 20,
+        "speed": 5,
+        "price": 500
+    },
+    {
+        "name": "SquirtSal",
+        "description": "Um pokesal que se parece com água",
+        "type": "WATER",
+        "healthPoints": 120,
+        "attack": 15,
+        "defense": 25,
+        "speed": 20,
+        "price": 450
+    },
+    {
+        "name": "ChikoSal",
+        "description": "Um pokesal que se parece com uma planta",
+        "type": "PLANT",
+        "healthPoints": 100,
+        "attack": 20,
+        "defense": 15,
+        "speed": 10,
+        "price": 500
+    },
+    {
+        "name": "CyndaSal",
+        "description": "Um pokesal que se parece com fogo",
+        "type": "FIRE",
+        "healthPoints": 100,
+        "attack": 35,
+        "defense": 20,
+        "speed": 15,
+        "price": 650
+    },
+    {
+        "name": "TotoSal",
+        "description": "Um pokesal que se parece com água",
+        "type": "WATER",
+        "healthPoints": 80,
+        "attack": 15,
+        "defense": 25,
+        "speed": 20,
+        "price": 400
+    }
+]

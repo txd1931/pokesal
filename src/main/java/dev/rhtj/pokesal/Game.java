@@ -32,6 +32,7 @@ public class Game {
     }
 
     public void setup(PrintStream out, InputStream in) {
+        loadData();
         this.out = out;
         this.in = in;
         world = new World(10);
@@ -66,5 +67,10 @@ public class Game {
 
     public World getWorld() {
         return world;
+    }
+
+    private void loadData() {
+        ItemRegistry.loadItems();
+        PokesalRegistry.loadPokesals();
     }
 }

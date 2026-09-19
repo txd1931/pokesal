@@ -6,23 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 
 public class ItemRegistry {
 
-    private record Item(
-        String id,
-        String name,
-        String description,
-        int price
-    ) {}
 
-
-    private static final Map<String, Item> REGISTRY = new HashMap<>();
+    private static final List<ItemRecord> REGISTRY = new ArrayList<>();
 
     private static final String ITEMS_SOURCE = "items.json";
 
@@ -33,11 +24,8 @@ public class ItemRegistry {
             if (inputStream == null)
                 throw new RuntimeException("items.json não foi encontrado");
 
-            List<Item> items = mapper.readValue(inputStream, new TypeReference<>() {});
-
-            for (Item item : items) {
-                REGISTRY.put(item.id(), item);
-            }
+            List<ItemRecord> items = mapper.readValue(inputStream, new TypeReference<>() {});
+            REGISTRY.addAll(items);
 
         } catch (IOException e) {
             System.err.println(
@@ -51,34 +39,35 @@ public class ItemRegistry {
         }
     }
 
-    public static String getName(String id) {
-        return REGISTRY.get(id).name;
+    public static ItemRecord getById(String id) {
+        for (ItemRecord item : REGISTRY) {
+            if (item.id().equals(id)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException("ID de item inválido: " + id);
     }
 
-    public static String getDescription(String id) {
-        return REGISTRY.get(id).description;
+    public static ItemRecord getByName(String name) {
+        for (ItemRecord item : REGISTRY) {
+            if (item.name().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException("Nome de item inválido: " + name);
     }
 
-    public static int getPrice(String id) {
-        return REGISTRY.get(id).price;
-    }
-
-    public static int getSellingPrice(String id) {
-        return (int) (getPrice(id) * 0.70f);
-    }
-
-    public static String getRandomId() {
+    public static ItemRecord getRandom() {
         Random random = new Random();
-        List<Item> itemList = new ArrayList<>(REGISTRY.values());
-        int randomIndex = random.nextInt(itemList.size());
-        return itemList.get(randomIndex).id;
+        int randomIndex = random.nextInt(REGISTRY.size());
+        return REGISTRY.get(randomIndex);
     }
 
-    public static boolean contains(String id) {
-        return REGISTRY.containsKey(id);
+    public static boolean contains(ItemRecord id) {
+        return REGISTRY.contains(id);
     }    
 
-    public static int total() {
+    public static int getRegistrySize() {
         return REGISTRY.size();
     }
 }

@@ -3,7 +3,7 @@ package dev.rhtj.pokesal.interfaces;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class StoreMenu implements Menu {
+public class ItemStoreMenu implements Menu {
     @Override
     public void display(PrintStream out) {
         

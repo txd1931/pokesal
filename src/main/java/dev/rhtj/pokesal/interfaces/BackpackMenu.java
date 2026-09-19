@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import dev.rhtj.pokesal.AnsiCode;
-import dev.rhtj.pokesal.ItemRegistry;
 import dev.rhtj.pokesal.entities.Backpack;
 
 public class BackpackMenu implements Menu {
@@ -21,8 +20,8 @@ public class BackpackMenu implements Menu {
     private int selectedItem = 0;
 
     public BackpackMenu(Backpack backpack, boolean canSell, Menu caller) {
-        this.canSell = canSell;
         this.backpack = backpack;
+        this.canSell = canSell;
         this.caller = caller;
         options = new Options();
     }
@@ -31,7 +30,7 @@ public class BackpackMenu implements Menu {
         options.clear();
         List<String> items = new ArrayList<>();        
         for (Backpack.Slot slot : backpack.getContents()) {
-            items.add("(" + slot.getAmmount() + ") " + ItemRegistry.getName(slot.getItemId()));
+            items.add("(" + slot.getAmmount() + ") " + slot.getItem().name());
         }
         options.add(items.toArray(new String[0]));
         options.setActionToAll(this::selectItem);

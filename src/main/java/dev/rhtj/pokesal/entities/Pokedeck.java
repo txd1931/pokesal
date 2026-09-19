@@ -46,11 +46,18 @@ public class Pokedeck {
     }
 
     public Pokesal get(int index) {
+        if (index < 0 || index >= pokesals.size()) {
+            throw new IllegalArgumentException("Index tem que ser entre 0 e " + (pokesals.size() - 1));
+        }
         return pokesals.get(index);
     }
 
     public Pokesal[] getAll() {
-        return (Pokesal[]) pokesals.toArray();
+        return pokesals.toArray(new Pokesal[0]);
+    }
+
+    public int getSize() {
+        return pokesals.size();
     }
 
     public Pokesal getNext() {

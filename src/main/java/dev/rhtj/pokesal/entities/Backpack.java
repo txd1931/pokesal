@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import dev.rhtj.pokesal.ItemRecord;
 import dev.rhtj.pokesal.ItemRegistry;
 
 public class Backpack {
     
     public static class Slot {
-        private final String itemId;
+        private final ItemRecord item;
         private int ammount;
 
-        public Slot(String itemId, int ammount) {
-            this.itemId = itemId;
+        public Slot(ItemRecord item, int ammount) {
+            this.item = item;
             this.ammount = ammount;
         }
 
-        public String getItemId() {
-            return itemId;
+        public ItemRecord getItem() {
+            return item;
         }
 
         public int getAmmount() {
@@ -38,28 +39,89 @@ public class Backpack {
     private void getStarterItems(long seed) {
         Random random = new Random(seed);
         while (random.nextInt(100) > 10) {
-            add(ItemRegistry.getRandomId(), 1);
+            add(ItemRegistry.getRandom(), 1);
         }
-        System.out.println(getTotalItems());
     }
 
-    public void sell(String id) {
+    public void sell(ItemRecord id) {
         validate(id);
-        carrier.addCash(ItemRegistry.getSellingPrice(id));
+        carrier.addCash(id.getSellingPrice());
         remove(id, 1);
     }
     
     public void sell(int index) {
         Slot slot = getSlot(index);
-        carrier.addCash(ItemRegistry.getSellingPrice(slot.getItemId()));
-        remove(slot.getItemId(), 1);
+        sell(slot.item);
     }
 
-    public void useItem(int index) {
+    @SuppressWarnings("unused")
+    public boolean useItem(int index) {
+        validateIndex(index);
+        Battle battle = null;
+        battle = carrier.getBattle();
+        Pokesal pokesal = carrier.getPokedeck().getNext();
+        Pokesal opponent = battle.getOpponentPokesal();
+        ItemRecord item = getSlot(index).item;
+        
+        switch (item.id()) {
+            case "fireball" -> {
+                if (battle == null)
+                    return false;
+                opponent.setEffect(Pokesal.Effect.BURN, 1.0);
+            }
+            case "potion_poison_weak" -> {
+                if (battle == null)
+                    return false;
+                pokesal.setEffect(Pokesal.Effect.POISON, 0.5);
+            }
+            case "potion_poison_strong" -> {
+                if (battle == null)
+                    return false;
+                pokesal.setEffect(Pokesal.Effect.POISON, 1.0);
+            }
+            case "antidote" -> {
+                pokesal.setEffect(Pokesal.Effect.POISON, 0.0);
+            }
+            case "iceball" -> {
+                if (battle == null)
+                    return false;
+                opponent.setEffect(Pokesal.Effect.FREEZE, 1.0);
+            }
+            case "mudball" -> {
+                if (battle == null)
+                    return false;
+                opponent.setSpeed((int) (pokesal.getSpeed() * 0.85f));
+            }
+            case "potion_health_weak" -> {
+                pokesal.setEffect(Pokesal.Effect.HEAL, 0.5d);
+            }
+            case "potion_health_strong" -> {
+                pokesal.setEffect(Pokesal.Effect.HEAL, 1.0d);
+            }
+            case "potion_health_instant" -> {
+                pokesal.setHealthPoints(pokesal.getPokesalRecord().healthPoints());
+            }
+            case "adrenaline" -> {
+                pokesal.setSpeed((int) (pokesal.getSpeed() * 1.25d));
+            }
+            case "shield" -> {
+                pokesal.setDefence((int) (pokesal.getDefence() * 1.5d));
+            }
+            case "sword" -> {
+                pokesal.setAtack((int) (pokesal.getAtack() * 1.3d));
+            }
+            case "nuke" -> {
+                if (battle == null)
+                    return false;
+                opponent.setHealthPoints(0);
+                pokesal.setHealthPoints(pokesal.getHealthPoints() - 50);
+            }
+        }
         remove(index);
+        return true;
     }
 
-    public void add(String id, int ammount) {
+    public void add(ItemRecord id, int ammount) {
         if(!ItemRegistry.contains(id)) {
             System.err.println(id + " não existe no jogo");
             System.exit(1);
@@ -73,7 +135,7 @@ public class Backpack {
         }
     }
 
-    public void remove(String id, int ammount) {
+    public void remove(ItemRecord id, int ammount) {
         validate(id);
         int index = indexOf(id);
         Slot slot = contents.get(index);
@@ -100,14 +162,9 @@ public class Backpack {
         contents.remove(index - 1); 
     }
 
-    public void removeAll(String id) {
+    public void removeAll(ItemRecord id) {
         validate(id);
         contents.remove(indexOf(id));
-    }
-
-    public Slot getSlot(String id) {
-        validate(id);
-        return contents.get(indexOf(id));
     }
 
     public Slot getSlot(int index) {
@@ -115,9 +172,13 @@ public class Backpack {
         return contents.get(index - 1);
     }
 
-    public int indexOf(String id) {
+    public Slot getSlot(ItemRecord id) {
+        return getSlot(indexOf(id));
+    }
+
+    public int indexOf(ItemRecord id) {
         for (int i = 0; i < contents.size(); i++) {
-            if (contents.get(i).itemId.equals(id)) {
+            if (contents.get(i).item.equals(id)) {
                 return i;
             }
         }
@@ -147,12 +208,24 @@ public class Backpack {
         } 
     }
 
-    private void validate(String id) {
+    public boolean contains(ItemRecord id) {
+        for (Slot slot : contents) {
+            if (slot.item == id) 
+                return true;
+        }
+        return false;
+    }
+
+    public Trainer getCarrier() {
+        return carrier;
+    }
+
+    private void validate(ItemRecord id) {
         if (!ItemRegistry.contains(id)) {
             System.err.println(id + " não existe no jogo");
             System.exit(1);
         }
-        if (indexOf(id) == -1) {
+        if (contains(id)) {
             System.err.println(id + " não consta na mochila de " + carrier.getName());
             System.exit(1);
         }

@@ -1,7 +1,8 @@
 package dev.rhtj.pokesal.entities;
 
-import java.util.List;
 import java.util.Random;
+
+import dev.rhtj.pokesal.PokesalRegistry;
 
 public class Trainer {
     
@@ -56,7 +57,7 @@ public class Trainer {
         "Rafael", "Hector", "João", "Thaylan", "Thiago", 
         "Felipe", "Rodrigo", "Gustavo", "Vitor", "Gabriel",     
         "Sophia", "Valentina", "Alice", "Beatriz", "Manuela", 
-        "Laura", "Yasmin", "Giovanna", "Isabella", "Lívia", 
+        "Laura", "Iasmin", "Giovana", "Isabela", "Lívia", 
     };
 
     public static final int MAX_NAME_LENGTH = 15;
@@ -64,9 +65,12 @@ public class Trainer {
     private String name;
     private Appearance appearence;
     private int cash;
+    private int score;
     private Backpack backpack;
+    private Pokedeck pokedeck;
     private int xPos = -1;
     private int yPos = -1;
+    private Battle battle;
 
     private boolean isPlayer = false;
 
@@ -75,10 +79,28 @@ public class Trainer {
         this.name = DEFAULT_NAMES[new Random().nextInt(DEFAULT_NAMES.length)];
         appearence = getRandomAppearance();
         backpack = new Backpack(this);
+        pokedeck = generateRandomPokedeck();
         cash = new Random().nextInt(5, 30) * 10;
+        if (this.isPlayer) 
+            cash = 500;
     }
 
-    public Appearance getRandomAppearance() {
+    private Pokedeck generateRandomPokedeck() {
+        Random random = new Random();
+        Pokedeck newPokedeck = new Pokedeck();
+        int index = 0;
+        Pokesal newPokesal = null; 
+        int pokesalRegitrySize = PokesalRegistry.getRegistrySize();
+
+        for (int i = 0; i <= random.nextInt(10); i++) {
+            index = random.nextInt(pokesalRegitrySize);
+            newPokesal = new Pokesal(PokesalRegistry.getById(index));
+            newPokedeck.add(newPokesal);
+        }
+        return newPokedeck;
+    }
+
+    private Appearance getRandomAppearance() {
         Appearance[] values = Appearance.values();
         int index = new Random().nextInt(values.length);
         return values[index];
@@ -104,6 +126,10 @@ public class Trainer {
         return cash;
     }
 
+    public Pokedeck getPokedeck() {
+        return pokedeck;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -120,6 +146,14 @@ public class Trainer {
         setCash(this.cash + cash);
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public int getXPos() {
         return xPos;
     }
@@ -130,5 +164,13 @@ public class Trainer {
     public void move(int x, int y) {
         xPos = x;
         yPos = y;
+    }
+
+    public void setBattle(Battle battle) {
+        this.battle = battle;
+    }
+
+    public Battle getBattle() {
+        return battle;
     }
 }
