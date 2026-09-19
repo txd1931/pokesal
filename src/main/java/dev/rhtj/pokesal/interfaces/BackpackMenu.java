@@ -50,8 +50,12 @@ public class BackpackMenu implements Menu {
             nextMenu = this;
             return;
         } 
-        backpack.useItem(selectedItem);
-        nextMenu = caller;
+        boolean usedItem = backpack.useItem(selectedItem);
+        if (usedItem)
+            nextMenu = caller;
+        else {
+            nextMenu = this;
+        }
     }
 
     private void selectItem(String text) {

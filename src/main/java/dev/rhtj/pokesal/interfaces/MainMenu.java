@@ -31,6 +31,7 @@ public class MainMenu implements Menu{
         options.add("Mochila");
         options.add("Pokedeck");
         options.add("Loja de Pokesals");
+        options.add("Loja de Itens");
         options.setActionToAll(this::selectOption);
     }
 
@@ -61,6 +62,9 @@ public class MainMenu implements Menu{
             }
             case "Loja de Pokesals" -> {
                 nextMenu = new PokesalStoreMenu(this);
+            }
+            case "Loja de Itens" -> {
+                nextMenu = new ItemStoreMenu(this);
             }
             default -> {
                 nextMenu = this;

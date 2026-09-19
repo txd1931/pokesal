@@ -33,7 +33,7 @@ public class PokesalStoreMenu implements Menu{
             int price = PokesalRegistry.getById(i).price();
             pokesalOptions[i] = 
             AnsiCode.apply(
-                String.valueOf(price), 
+                "$" + String.valueOf(price), 
                 (price > avaliableCash ? AnsiCode.RED : AnsiCode.GREEN), AnsiCode.BOLD
             ) +
             AnsiCode.apply(
@@ -68,31 +68,39 @@ public class PokesalStoreMenu implements Menu{
             AnsiCode.apply(
                 "LOJA DE POKESAL", 
                 AnsiCode.CYAN, AnsiCode.BOLD
-            )
+            ) + "\n"
         );
 
         out.println(
             AnsiCode.apply(
                 "$" + String.valueOf(player.getCash()), 
                 AnsiCode.GREEN, AnsiCode.BOLD
-            )
+            ) + "\n"
         );
         
         for (int i = 0; i < pokesalOptions.length; i++) {
             options.display(i + 1, out);
         }
-        out.print(AnsiCode.CYAN);
+        out.println(AnsiCode.CYAN);
         options.display(pokesalOptions.length + 1, out);
         out.print(AnsiCode.RESET);
     }
 
     @Override
     public String getInput(Scanner scanner) {
-        input = Integer.parseInt(scanner.nextLine());
-
+        try {
+            input = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            nextMenu = this;
+            return null;
+        }
+        if (input < 1 || input > options.getTotal()) {
+            nextMenu = this;
+            return null;
+        }
         options.choose(input);
         
-        return null;
+        return String.valueOf(input);
     }
     
     @Override

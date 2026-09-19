@@ -48,6 +48,12 @@ public class ItemRegistry {
         throw new IllegalArgumentException("ID de item inválido: " + id);
     }
 
+    public static ItemRecord getByIndex(int index) {
+        if (index < 0 || index >= REGISTRY.size()) 
+            throw new IndexOutOfBoundsException("Index inválido: " + index);
+        return REGISTRY.get(index);
+    }
+
     public static ItemRecord getByName(String name) {
         for (ItemRecord item : REGISTRY) {
             if (item.name().equalsIgnoreCase(name)) {

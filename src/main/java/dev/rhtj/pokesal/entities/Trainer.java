@@ -81,8 +81,6 @@ public class Trainer {
         backpack = new Backpack(this);
         pokedeck = generateRandomPokedeck();
         cash = new Random().nextInt(5, 30) * 10;
-        if (this.isPlayer) 
-            cash = 500;
     }
 
     private Pokedeck generateRandomPokedeck() {

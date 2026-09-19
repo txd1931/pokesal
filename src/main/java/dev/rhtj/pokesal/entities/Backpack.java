@@ -60,7 +60,9 @@ public class Backpack {
         Battle battle = null;
         battle = carrier.getBattle();
         Pokesal pokesal = carrier.getPokedeck().getNext();
-        Pokesal opponent = battle.getOpponentPokesal();
+        Pokesal opponent = null;
+        if (battle != null)
+            opponent = battle.getOpponentPokesal();
         ItemRecord item = getSlot(index).item;
         
         switch (item.id()) {
@@ -82,7 +84,7 @@ public class Backpack {
             case "antidote" -> {
                 pokesal.setEffect(Pokesal.Effect.POISON, 0.0);
             }
-            case "iceball" -> {
+            case "snowball" -> {
                 if (battle == null)
                     return false;
                 opponent.setEffect(Pokesal.Effect.FREEZE, 1.0);
