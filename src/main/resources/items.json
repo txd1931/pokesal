@@ -7,19 +7,19 @@
     },
     {
         "id": "potion_poison_weak",
-        "name": "Poção de Veneno",
+        "name": "Pocao de Veneno",
         "description": "Envenena o inimigo",
         "price": 40
     },
     {
         "id": "potion_poison_strong",
-        "name": "Poção de Veneno Forte",
+        "name": "Pocao de Veneno Forte",
         "description": "Envenena bastante o inimigo",
         "price": 120
     },
     {
         "id": "antidote",
-        "name": "Antídoto",
+        "name": "Antidoto",
         "description": "Deixa o seu pokesal mais resistente a veneno",
         "price": 80
     },
@@ -37,19 +37,19 @@
     },
     {
         "id": "potion_health_weak",
-        "name": "Poção de Vida",
+        "name": "Pocao de Vida",
         "description": "Recupera um pouco da vida do seu pokesal ao longo do tempo",
         "price": 40
     },
     {
         "id": "potion_health_strong",
-        "name": "Poção de Vida Forte",
+        "name": "Pocao de Vida Forte",
         "description": "Recupera bastante da vida do seu pokesal ao longo do tempo",
         "price": 120
     },
     {
         "id": "potion_health_instant",
-        "name": "Poção de Vida Instantânea",
+        "name": "Pocao de Vida Instantânea",
         "description": "Recupera instantaneamente a vida do seu pokesal",
         "price": 200
     },
