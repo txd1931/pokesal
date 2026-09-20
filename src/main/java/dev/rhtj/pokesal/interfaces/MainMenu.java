@@ -55,7 +55,7 @@ public class MainMenu implements Menu{
                 nextMenu = new ExitMenu(this);
             }
             case "Mochila" -> {
-                nextMenu = new BackpackMenu(player.getBackpack(), false, this);
+                nextMenu = new BackpackMenu(player.getBackpack(), false, true, this);
             } 
             case "Pokedeck" -> {
                 nextMenu = new PokedeckMenu(player, this);

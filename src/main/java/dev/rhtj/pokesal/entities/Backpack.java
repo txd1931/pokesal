@@ -43,55 +43,45 @@ public class Backpack {
         }
     }
 
-    public void sell(ItemRecord id) {
-        validate(id);
+    public void sellItem(ItemRecord id) {
         carrier.addCash(id.getSellingPrice());
         remove(id, 1);
     }
     
-    public void sell(int index) {
+    public void sellItem(int index) {
         Slot slot = getSlot(index);
-        sell(slot.item);
+        sellItem(slot.item);
     }
 
-    @SuppressWarnings("unused")
-    public boolean useItem(int index) {
+    public boolean useItem(int index, Battle battle) {
+        if (battle != null) {
+            System.err.println("Batalha não encontrada para utilizar o item");
+            System.exit(1);
+        }
         validateIndex(index);
-        Battle battle = null;
         battle = carrier.getBattle();
         Pokesal pokesal = carrier.getPokedeck().getNext();
         Pokesal opponent = null;
-        if (battle != null)
-            opponent = battle.getOpponentPokesal();
+        opponent = battle.getOpponentPokesal();
         ItemRecord item = getSlot(index).item;
         
         switch (item.id()) {
             case "fireball" -> {
-                if (battle == null)
-                    return false;
                 opponent.setEffect(Pokesal.Effect.BURN, 1.0);
             }
             case "potion_poison_weak" -> {
-                if (battle == null)
-                    return false;
                 pokesal.setEffect(Pokesal.Effect.POISON, 0.5);
             }
             case "potion_poison_strong" -> {
-                if (battle == null)
-                    return false;
                 pokesal.setEffect(Pokesal.Effect.POISON, 1.0);
             }
             case "antidote" -> {
                 pokesal.setEffect(Pokesal.Effect.POISON, 0.0);
             }
             case "snowball" -> {
-                if (battle == null)
-                    return false;
                 opponent.setEffect(Pokesal.Effect.FREEZE, 1.0);
             }
             case "mudball" -> {
-                if (battle == null)
-                    return false;
                 opponent.setSpeed((int) (pokesal.getSpeed() * 0.85f));
             }
             case "potion_health_weak" -> {
@@ -104,7 +94,7 @@ public class Backpack {
                 pokesal.setHealthPoints(pokesal.getPokesalRecord().healthPoints());
             }
             case "adrenaline" -> {
-                pokesal.setSpeed((int) (pokesal.getSpeed() * 1.25d));
+                pokesal.setSpeed((int) (pokesal.getSpeed() * 1.75d));
             }
             case "shield" -> {
                 pokesal.setDefence((int) (pokesal.getDefence() * 1.5d));
@@ -113,8 +103,6 @@ public class Backpack {
                 pokesal.setAtack((int) (pokesal.getAtack() * 1.3d));
             }
             case "nuke" -> {
-                if (battle == null)
-                    return false;
                 opponent.setHealthPoints(0);
                 pokesal.setHealthPoints(pokesal.getHealthPoints() - 50);
             }
@@ -212,7 +200,7 @@ public class Backpack {
 
     public boolean contains(ItemRecord id) {
         for (Slot slot : contents) {
-            if (slot.item == id) 
+            if (slot.item.id().equalsIgnoreCase(id.id())) 
                 return true;
         }
         return false;
@@ -227,7 +215,7 @@ public class Backpack {
             System.err.println(id + " não existe no jogo");
             System.exit(1);
         }
-        if (contains(id)) {
+        if (!contains(id)) {
             System.err.println(id + " não consta na mochila de " + carrier.getName());
             System.exit(1);
         }

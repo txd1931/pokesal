@@ -21,6 +21,6 @@ public class Bot {
         
         Backpack backpack = npc.getBackpack();
         int totalSlots = backpack.getTotalSlots();
-        backpack.useItem(random.nextInt(1, totalSlots + 1));
+        backpack.useItem(random.nextInt(1, totalSlots + 1), npc.getBattle());
     }
 }
