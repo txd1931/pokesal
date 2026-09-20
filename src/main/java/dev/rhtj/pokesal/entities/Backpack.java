@@ -60,53 +60,13 @@ public class Backpack {
         }
         validateIndex(index);
         battle = carrier.getBattle();
-        Pokesal pokesal = carrier.getPokedeck().getNext();
-        Pokesal opponent = null;
-        opponent = battle.getOpponentPokesal();
+        //Pokesal pokesal = carrier.getPokedeck().getNext();
+        //Pokesal opponent = null;
+        //opponent = battle.getOpponentPokesal();
         ItemRecord item = getSlot(index).item;
         
-        switch (item.id()) {
-            case "fireball" -> {
-                opponent.setEffect(Pokesal.Effect.BURN, 1.0);
-            }
-            case "potion_poison_weak" -> {
-                pokesal.setEffect(Pokesal.Effect.POISON, 0.5);
-            }
-            case "potion_poison_strong" -> {
-                pokesal.setEffect(Pokesal.Effect.POISON, 1.0);
-            }
-            case "antidote" -> {
-                pokesal.setEffect(Pokesal.Effect.POISON, 0.0);
-            }
-            case "snowball" -> {
-                opponent.setEffect(Pokesal.Effect.FREEZE, 1.0);
-            }
-            case "mudball" -> {
-                opponent.setSpeed((int) (pokesal.getSpeed() * 0.85f));
-            }
-            case "potion_health_weak" -> {
-                pokesal.setEffect(Pokesal.Effect.HEAL, 0.5d);
-            }
-            case "potion_health_strong" -> {
-                pokesal.setEffect(Pokesal.Effect.HEAL, 1.0d);
-            }
-            case "potion_health_instant" -> {
-                pokesal.setHealthPoints(pokesal.getPokesalRecord().healthPoints());
-            }
-            case "adrenaline" -> {
-                pokesal.setSpeed((int) (pokesal.getSpeed() * 1.75d));
-            }
-            case "shield" -> {
-                pokesal.setDefence((int) (pokesal.getDefence() * 1.5d));
-            }
-            case "sword" -> {
-                pokesal.setAtack((int) (pokesal.getAtack() * 1.3d));
-            }
-            case "nuke" -> {
-                opponent.setHealthPoints(0);
-                pokesal.setHealthPoints(pokesal.getHealthPoints() - 50);
-            }
-        }
+        battle.useItem(item);
+        
         remove(index);
         return true;
     }

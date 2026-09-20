@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import dev.rhtj.pokesal.AnsiCode;
 import dev.rhtj.pokesal.Game;
+import dev.rhtj.pokesal.entities.Battle;
 import dev.rhtj.pokesal.entities.Trainer;
 
 public class MainMenu implements Menu{
@@ -24,7 +25,7 @@ public class MainMenu implements Menu{
 
     private void setupOptions() {
         options.clear();
-        options.add("Continuar Jogo");
+        options.add("Iniciar Batalha");
         options.add("Sobre");
         options.add("Customizar seu Treinador");
         options.add("Sair");
@@ -37,13 +38,8 @@ public class MainMenu implements Menu{
 
     private void selectOption(String text) {
         switch (text) {
-            case "Continuar Jogo" -> {
-                if (gameMenu == null) {
-                    nextMenu = gameMenu = new GameMenu(this);
-                    
-                } else {
-                    nextMenu = gameMenu;
-                }
+            case "Iniciar Batalha" -> {
+                nextMenu = new BattleMenu();
             } 
             case "Sobre" -> {
                 nextMenu = new AboutMenu(this);

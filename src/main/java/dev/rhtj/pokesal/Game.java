@@ -61,7 +61,7 @@ public class Game {
     }
 
     private void clearOutput() { 
-        out.print(ANSI_CLEAR_AND_RESET);
+        //out.print(ANSI_CLEAR_AND_RESET);
         out.flush();
     }
 
@@ -72,5 +72,15 @@ public class Game {
     private void loadData() {
         ItemRegistry.loadItems();
         PokesalRegistry.loadPokesals();
+    }
+
+    public static void sleep(long miliseconds) {
+        try {
+            Thread.sleep(miliseconds);
+        } catch (InterruptedException e) {
+            System.err.println(e.getMessage());
+            System.err.println(e.getStackTrace());
+            System.exit(1);
+        }
     }
 }

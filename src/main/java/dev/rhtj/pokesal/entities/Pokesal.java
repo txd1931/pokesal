@@ -51,7 +51,7 @@ public class Pokesal {
     private int atack;
     private int defence;
     private int speed;
-    private double[] effects = new double[4];
+    private Double[] effects = new Double[4];
 
     public Pokesal(PokesalRecord pokesalRecord) {
         this.pokesalRecord = pokesalRecord;
@@ -109,4 +109,47 @@ public class Pokesal {
         effects[effect.getIndex()] = value;
     }
 
+    public int getAtackDamage(Pokesal opponent) {
+        float typeMultiplier = 
+        switch (opponent.getPokesalRecord().type()) {
+            case FIRE -> opponent.getPokesalRecord().type() == PokesalType.PLANT ? 2 : 0.5f;
+            case WATER -> opponent.getPokesalRecord().type() == PokesalType.FIRE ? 2 : 0.5f;
+            case PLANT -> opponent.getPokesalRecord().type() == PokesalType.WATER ? 2 : 0.5f;
+        };
+
+        int damage = (int) ((atack * atack) / (atack + opponent.getDefence()) * typeMultiplier);
+        if (damage < 0) {
+            damage = 0;
+        }
+        return damage;
+    }
+
+    private void applyEffects() {
+        
+        healthPoints -= getEffect(Effect.BURN) * 10;
+        speed -= getEffect(Effect.FREEZE) * 2;
+
+        for (Double effect : effects) {
+            if (effect > 0.01d) {
+                effect *= 0.85d;
+                effect -= 0.05d;
+            } else {
+                effect = 0d;
+            }
+        }
+    }
+
+    public Double getEffect(Effect effect) {
+        return effects[effect.getIndex()];
+    }
+
+    public Double[] getAllEffects() {
+        return effects.clone();
+    } 
+    
+    public void atack(Pokesal opponent) {
+        int damage = getAtackDamage(opponent);
+        opponent.setHealthPoints(opponent.getHealthPoints() - damage);
+        applyEffects();
+    }
 }

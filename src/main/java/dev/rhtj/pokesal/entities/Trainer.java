@@ -71,6 +71,7 @@ public class Trainer {
     private int xPos = -1;
     private int yPos = -1;
     private Battle battle;
+    private Bot bot;
 
     private boolean isPlayer = false;
 
@@ -83,6 +84,8 @@ public class Trainer {
         cash = new Random().nextInt(5, 30) * 10;
         if (this.isPlayer) {
             cash = 800;
+        } else {
+            bot = new Bot(this);
         }
     }
 
@@ -173,5 +176,13 @@ public class Trainer {
 
     public Battle getBattle() {
         return battle;
+    }
+
+    public Bot getBot() {
+        return bot;
+    }
+    
+    public void setBot(Bot bot) {
+        this.bot = bot;
     }
 }

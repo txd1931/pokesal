@@ -44,7 +44,7 @@
         "description": "Um pokesal que se parece com fogo",
         "type": "FIRE",
         "healthPoints": 100,
-        "attack": 35,
+        "attack": 40,
         "defense": 20,
         "speed": 15,
         "price": 650

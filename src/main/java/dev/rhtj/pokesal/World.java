@@ -127,6 +127,11 @@ public class World {
         return trainers.get(i);
     }
 
+    public Trainer getRandomNPC() {
+        Random random = new Random();
+        return trainers.get(random.nextInt(1, trainers.size()));
+    }
+
     public Trainer[] getTrainersAt(int x, int y) {
         List<Trainer> foundTrainers = new ArrayList<>();
         Trainer current = null;
