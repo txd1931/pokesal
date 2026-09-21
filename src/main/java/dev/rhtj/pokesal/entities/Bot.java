@@ -8,7 +8,7 @@ public class Bot {
     
     private Trainer npc;
 
-    private static float DELAY_MULTIPLYER = 1.0f;
+    private static float DELAY_MULTIPLYER = 0.3f;
 
     public Bot(Trainer npc) {
         this.npc = npc;
@@ -21,8 +21,11 @@ public class Bot {
 
         Backpack backpack = npc.getBackpack();
         int totalSlots = backpack.getTotalSlots();
-        backpack.useItem(random.nextInt(1, totalSlots + 1), npc.getBattle());
+        if (totalSlots > 0) 
+            backpack.useItem(random.nextInt(1, totalSlots + 1), npc.getBattle());
         
         Game.sleep(random.nextLong((long) (DELAY_MULTIPLYER * 500), (long) (DELAY_MULTIPLYER *  1500)));    
+        
+        npc.getBattle().atack();
     }
 }

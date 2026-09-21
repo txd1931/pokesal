@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import dev.rhtj.pokesal.AnsiCode;
 import dev.rhtj.pokesal.Game;
-import dev.rhtj.pokesal.entities.Battle;
 import dev.rhtj.pokesal.entities.Trainer;
 
 public class MainMenu implements Menu{
@@ -15,7 +14,6 @@ public class MainMenu implements Menu{
     private Trainer player = null;
     private Options options = null;
     private Menu nextMenu = this;
-    private Menu gameMenu = null;
 
     public MainMenu() {
         player = Game.getInstance().getWorld().getPlayer();
@@ -28,27 +26,24 @@ public class MainMenu implements Menu{
         options.add("Iniciar Batalha");
         options.add("Sobre");
         options.add("Customizar seu Treinador");
-        options.add("Sair");
         options.add("Mochila");
         options.add("Pokedeck");
         options.add("Loja de Pokesals");
         options.add("Loja de Itens");
+        options.add("Sair");
         options.setActionToAll(this::selectOption);
     }
 
     private void selectOption(String text) {
         switch (text) {
             case "Iniciar Batalha" -> {
-                nextMenu = new BattleMenu();
+                nextMenu = new BattleMenu(this);
             } 
             case "Sobre" -> {
                 nextMenu = new AboutMenu(this);
             }
             case "Customizar seu Treinador" -> {
                 nextMenu = new TrainerMenu(player, this);
-            }
-            case "Sair" -> {
-                nextMenu = new ExitMenu(this);
             }
             case "Mochila" -> {
                 nextMenu = new BackpackMenu(player.getBackpack(), false, true, this);
@@ -61,6 +56,9 @@ public class MainMenu implements Menu{
             }
             case "Loja de Itens" -> {
                 nextMenu = new ItemStoreMenu(this);
+            }
+            case "Sair" -> {
+                nextMenu = null;
             }
             default -> {
                 nextMenu = this;

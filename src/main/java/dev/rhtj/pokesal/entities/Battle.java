@@ -29,7 +29,7 @@ public class Battle {
     }
 
     private Trainer[] trainers = new Trainer[2];
-    private int trainersRemainingItemUsages[] = new int[2];
+    private int[] trainersRemainingItemUsages = new int[2];
     private Pokesal[] pokesals = new Pokesal[2];
     private State state = State.NULL;
     private int turns = 0;
@@ -41,6 +41,8 @@ public class Battle {
         pokesals[0] = trainerA.getPokedeck().getNext();
         trainers[1] = trainerB;
         pokesals[1] = trainerB.getPokedeck().getNext();
+        trainersRemainingItemUsages[0] = 2;
+        trainersRemainingItemUsages[1] = 2;
         decideNextTrainer();
     }
 
@@ -58,6 +60,10 @@ public class Battle {
 
     public void endBattle() {
         state = (state == State.TRAINER_A_TURN) ? State.TRAINER_A_WON : State.TRAINER_B_WON;
+
+        int cashDiff = (int) (getLoser().getCash() * 0.1f);
+        getWinner().setCash(getWinner().getCash() + cashDiff);
+        getLoser().setCash(getLoser().getCash() - cashDiff);
     }
 
     public int getRound() {
@@ -69,12 +75,12 @@ public class Battle {
     }
 
     private void nextTurn() {
+        turns++;
         if (!state.isActive()) {
             System.err.println("O turno não pode ser avançado em uma batalha inativa");
             System.exit(1);
         }
         decideNextTrainer();
-        turns++;
     }
 
     private void decideNextTrainer() {
@@ -113,8 +119,8 @@ public class Battle {
         getCurrentPokesal().atack(getOpponentPokesal());
         if (getOpponentPokesal().getHealthPoints() <= 0) 
             endBattle();
-        
-        nextTurn();    
+        else 
+            nextTurn();    
     }
 
     public boolean useItem(ItemRecord item) {
@@ -144,7 +150,7 @@ public class Battle {
                 opponent.setEffect(Pokesal.Effect.FREEZE, 1.0);
             }
             case "mudball" -> {
-                opponent.setSpeed((int) (current.getSpeed() * 0.85f));
+                opponent.setSpeed((int) (opponent.getSpeed() * 0.85f));
             }
             case "potion_health_weak" -> {
                 current.setEffect(Pokesal.Effect.HEAL, 0.5d);
@@ -169,6 +175,7 @@ public class Battle {
                 current.setHealthPoints(current.getHealthPoints() - 50);
             }
         }
+        trainersRemainingItemUsages[state.toId()]--;
         return true;
     }
 
@@ -187,7 +194,7 @@ public class Battle {
     public Trainer getWinner() {
         if (!state.hasEnded())
             return null;
-        return trainers[state == State.TRAINER_A_WON ? 1 : 0];
+        return trainers[state == State.TRAINER_A_WON ? 0 : 1];
     }
 
     public Trainer getLoser() {

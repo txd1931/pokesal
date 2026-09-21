@@ -61,7 +61,7 @@ public class Game {
     }
 
     private void clearOutput() { 
-        //out.print(ANSI_CLEAR_AND_RESET);
+        out.print(ANSI_CLEAR_AND_RESET);
         out.flush();
     }
 

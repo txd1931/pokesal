@@ -54,18 +54,17 @@ public class Backpack {
     }
 
     public boolean useItem(int index, Battle battle) {
-        if (battle != null) {
+        if (battle == null) {
             System.err.println("Batalha não encontrada para utilizar o item");
             System.exit(1);
         }
         validateIndex(index);
         battle = carrier.getBattle();
-        //Pokesal pokesal = carrier.getPokedeck().getNext();
-        //Pokesal opponent = null;
-        //opponent = battle.getOpponentPokesal();
         ItemRecord item = getSlot(index).item;
         
-        battle.useItem(item);
+        if (!battle.useItem(item)) {
+            return false;
+        }
         
         remove(index);
         return true;

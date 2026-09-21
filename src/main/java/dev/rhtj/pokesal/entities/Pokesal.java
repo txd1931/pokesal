@@ -63,6 +63,9 @@ public class Pokesal {
         this.atack = pokesalRecord.attack();
         this.defence = pokesalRecord.defense();
         this.speed = pokesalRecord.speed();
+        for (int i = 0; i < effects.length; i++) {
+            effects[i] = Double.valueOf(0);
+        }
     }
 
     public PokesalRecord getPokesalRecord() {
@@ -127,14 +130,16 @@ public class Pokesal {
     private void applyEffects() {
         
         healthPoints -= getEffect(Effect.BURN) * 10;
+        healthPoints -= getEffect(Effect.POISON) * 10;
+        healthPoints += getEffect(Effect.HEAL) * 10;
         speed -= getEffect(Effect.FREEZE) * 2;
 
-        for (Double effect : effects) {
-            if (effect > 0.01d) {
-                effect *= 0.85d;
-                effect -= 0.05d;
+        for (int i = 0; i < effects.length; ++i) {
+            if (effects[i] > 0.01d) {
+                effects[i] *= 0.85d;
+                effects[i] -= 0.05d;
             } else {
-                effect = 0d;
+                effects[i] = 0d;
             }
         }
     }
