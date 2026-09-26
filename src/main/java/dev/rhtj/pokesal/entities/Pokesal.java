@@ -113,14 +113,25 @@ public class Pokesal {
     }
 
     public int getAtackDamage(Pokesal opponent) {
-        float typeMultiplier = 
-        switch (opponent.getPokesalRecord().type()) {
-            case FIRE -> opponent.getPokesalRecord().type() == PokesalType.PLANT ? 2 : 0.5f;
-            case WATER -> opponent.getPokesalRecord().type() == PokesalType.FIRE ? 2 : 0.5f;
-            case PLANT -> opponent.getPokesalRecord().type() == PokesalType.WATER ? 2 : 0.5f;
-        };
+        float typeMultiplier = 1;
 
-        int damage = (int) ((atack * atack) / (atack + opponent.getDefence()) * typeMultiplier);
+        switch (this.getPokesalRecord().type()) {
+            case FIRE:
+                if(opponent.getPokesalRecord().type() == PokesalType.PLANT){typeMultiplier = 2;}
+                if(opponent.getPokesalRecord().type() == PokesalType.WATER){typeMultiplier = 0.5f;}
+            break;
+            case WATER:
+                if(opponent.getPokesalRecord().type() == PokesalType.FIRE){typeMultiplier = 2;}
+                if(opponent.getPokesalRecord().type() == PokesalType.PLANT){typeMultiplier = 0.5f;}
+            break;
+            case PLANT:
+                if(opponent.getPokesalRecord().type() == PokesalType.WATER){typeMultiplier = 2;}
+                if(opponent.getPokesalRecord().type() == PokesalType.FIRE){typeMultiplier = 0.5f;}
+            break;
+        };
+        
+        int damage = (int) (this.atack*typeMultiplier - opponent.getDefence());
+        
         if (damage < 0) {
             damage = 0;
         }
@@ -152,9 +163,10 @@ public class Pokesal {
         return effects.clone();
     } 
     
-    public void atack(Pokesal opponent) {
+    public void attacking(Pokesal opponent) {
         int damage = getAtackDamage(opponent);
         opponent.setHealthPoints(opponent.getHealthPoints() - damage);
         applyEffects();
+        if(opponent.getHealthPoints()<0){opponent.setHealthPoints(0);}
     }
 }

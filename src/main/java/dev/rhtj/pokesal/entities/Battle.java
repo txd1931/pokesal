@@ -116,7 +116,7 @@ public class Battle {
             System.err.println(getCurrentTrainer().getName() + " tentou atacar em uma batalha inativa");
             System.exit(1);
         }
-        getCurrentPokesal().atack(getOpponentPokesal());
+        getCurrentPokesal().attacking(getOpponentPokesal());
         if (getOpponentPokesal().getHealthPoints() <= 0) 
             endBattle();
         else 
@@ -213,6 +213,15 @@ public class Battle {
         if (!state.isActive())
             return null;
         return state == State.TRAINER_A_TURN ? trainers[1] : trainers[0];
+    }
+
+    public int getTrainersRemainingItemUsages(int i) {
+        return trainersRemainingItemUsages[i];
+    }
+
+
+    public void setTrainersRemainingItemUsages(int i, int usesRemaing) {
+        this.trainersRemainingItemUsages[i] = usesRemaing;
     }
 
 }

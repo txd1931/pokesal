@@ -143,7 +143,11 @@ public class Trainer {
     }
 
     public void setCash(int cash) {
-        this.cash = cash;
+        if (cash<0) {
+            this.cash = 0;
+        }else{
+            this.cash = cash;
+        }
     }
     
     public void addCash(int cash) {

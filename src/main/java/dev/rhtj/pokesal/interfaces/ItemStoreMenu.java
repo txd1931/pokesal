@@ -56,7 +56,7 @@ public class ItemStoreMenu implements Menu {
         });
     }
 
-    private void purchasedItem(String text) {
+    public void purchasedItem(String text) {
         nextMenu = this;
         ItemRecord chosenItem = ItemRegistry.getByIndex(input - 1);
         if (player.getCash() < chosenItem.price())
